@@ -89,6 +89,7 @@ def wakanda_handler():
             driver.refresh()
             WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'nameField')))
         
+        print('page opened')
         username = driver.find_element_by_id('nameField')
         ActionChains(driver).move_to_element(username).perform()
         username.click()
@@ -150,6 +151,7 @@ def wakanda_handler():
                         send_comment = driver.find_element_by_id('ReplyButton')
                         ActionChains(driver).move_to_element(send_comment).perform()
                         send_comment.click()
+                        print('answer submitted')
                         if end_time > time.time():
                             time.sleep(end_time-time.time())
                         else: pass
@@ -202,6 +204,7 @@ def wakanda_handler():
             
             landage += 1
             completed += 1
+            print(completed)
             if time.localtime()[3] > 22:
                 post_var += 1
                 completed = 0
