@@ -117,7 +117,7 @@ def wakanda_handler():
         if serum == False:
             first_post_box = driver.find_element_by_class_name('blog-list-details') #this section would select the first post ont he landing page and proceed
             la_herd = first_post_box.find_elements_by_class_name('item-details')
-            first_post = la_herd[0].find_element_by_tag_name('a')
+            first_post = la_herd[50].find_element_by_tag_name('a')
             first_post.click()
             WebDriverWait(driver, 5).until(EC.visibility_of_element_located((By.CLASS_NAME, 'plan2-recommended')))
             driver.refresh()
