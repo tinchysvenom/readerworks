@@ -67,7 +67,6 @@ sec_intervals = (54000/todays_post_target) + 1
 completed = 0
 landage = 0
 
-
 def wakanda_handler():
     global post_var
     global completed
@@ -79,7 +78,7 @@ def wakanda_handler():
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument('--disable-dev-shm-usage')
-        options.add_argument("--disable-infobars")
+        chrome_options.add_argument("--disable-infobars")
         chrome_options.binary_location = chrome_exec_shim 
         driver = webdriver.Chrome(executable_path="chromedriver",   options=chrome_options)
         driver.get("https://wakanda.ng/login")
