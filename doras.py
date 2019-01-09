@@ -9,9 +9,6 @@ from flask import Flask
 
 
 app = Flask(__name__)
-mount_type = None
-#page_type = None
-
 
 @app.route('/')
 def home_view():
