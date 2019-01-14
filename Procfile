@@ -1,1 +1,1 @@
-worker: python wakdeploy.py
+worker: python3 wakdeploy.py
