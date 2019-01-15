@@ -40,7 +40,7 @@ def naira_handler():
     login = driver.find_element_by_xpath('/html/body/div/table[2]/tbody/tr[2]/td/form/input[3]')
     login.click()
     print('logged in')
-    val_no = 1
+    val_no = 8
 
     while val_no <= 20:
         WebDriverWait(driver, 5).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="up"]/tbody/tr/td/a[10]')))
