@@ -70,3 +70,10 @@ def naira_handler():
 
     driver.close()
     driver.quit()
+    
+while True:
+    try:
+        naira_handler()
+    except:
+        continue
+    break
