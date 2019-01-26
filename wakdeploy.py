@@ -92,6 +92,7 @@ def waka_handler():
         chrome_options.binary_location = chrome_exec_shim
         driver = webdriver.Chrome(executable_path="chromedriver",   options=chrome_options)
         driver.get("https://wakanda.ng/login")
+        driver.implicitly_wait(10)
         try:
             WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'nameField')))
         except:
@@ -115,6 +116,7 @@ def waka_handler():
         logbut = driver.find_element_by_xpath('//*[@id="main"]/div[4]/div/div/div[1]/div/div/form/div[4]/button')
         ActionChains(driver).move_to_element(logbut).perform()
         logbut.click()
+        driver.implicitly_wait(10)
         #the code to automate the facebok postings go here
         time.sleep(3)
         print('logged in')
