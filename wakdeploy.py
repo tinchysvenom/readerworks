@@ -7,7 +7,6 @@ Created on Mon Jan 14 20:55:45 2019
 
 
 import re
-import os
 import gc
 import time
 from selenium import webdriver
