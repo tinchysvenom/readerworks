@@ -86,6 +86,7 @@ while True and time.localtime()[3] <= 22 or time.localtime()[3] >= 7:
             chrome_options.binary_location = chrome_exec_shim
             driver = webdriver.Chrome(executable_path="chromedriver",   options=chrome_options)
             driver.get("https://wakanda.ng/login")
+            print('page opened')
             
             while True: #log in
                 try:
@@ -115,6 +116,7 @@ while True and time.localtime()[3] <= 22 or time.localtime()[3] >= 7:
 
             del username, passiv, logbut
             gc.collect()
+            print('logged in')
             
             while True: #click post
                 try:
@@ -160,6 +162,7 @@ while True and time.localtime()[3] <= 22 or time.localtime()[3] >= 7:
                 break
             del first_post_box, la_herd, first_post
             gc.collect()
+            print('first post clicked')
             
             while True and completed < todays_post_target: 
                 try: #read post and send reply
