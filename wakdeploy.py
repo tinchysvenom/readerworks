@@ -164,7 +164,7 @@ while True and time.localtime()[3] <= 22 or time.localtime()[3] >= 7:
             gc.collect()
             print('first post clicked')
             
-            while True and completed < todays_post_target: 
+            while completed < todays_post_target: 
                 try: #read post and send reply
                     try:
                         username = driver.find_element_by_class_name('plan2-recommended')
