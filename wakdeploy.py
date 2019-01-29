@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Jan 14 20:55:45 2019
-
+Created on Mon Dec  3 23:00:25 2018
 @author: USER
 """
 
-
 import re
+import os
 import gc
 import time
 from selenium import webdriver
@@ -16,6 +15,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from sklearn.feature_extraction.text import CountVectorizer
 from selenium.webdriver.support import expected_conditions as EC
+
 
 
 def post_summarizer(article):
@@ -72,18 +72,17 @@ landage = 0
 pager = 0
 serum = False
 
-
-while True and time.localtime()[3] <= 22 or time.localtime()[3] >= 7:
+while time.localtime()[3] <= 22 or time.localtime()[3] >= 7:
     try:
         if time.localtime()[3] >= 7: #this section starts the day activities and picks the post target for the day
-            chrome_exec_shim = '/app/.apt/usr/bin/google-chrome'
             chrome_options = Options() #the code to open/connect to the site starts here, the code to handle the login goes here
+            chrome_options.add_argument("--headless")
             chrome_options.add_argument("--headless")
             chrome_options.add_argument("--no-sandbox")
             chrome_options.add_argument("--disable-gpu")
             chrome_options.add_argument('--disable-dev-shm-usage')
             chrome_options.add_argument("--disable-infobars")
-            chrome_options.binary_location = chrome_exec_shim
+            chrome_options.binary_location = '/app/.apt/usr/bin/google-chrome'
             driver = webdriver.Chrome(executable_path="chromedriver",   options=chrome_options)
             driver.get("https://wakanda.ng/login")
             print('page opened')
@@ -141,7 +140,8 @@ while True and time.localtime()[3] <= 22 or time.localtime()[3] >= 7:
                                 username = driver.find_element_by_class_name('blog')
                                 passiv = username.find_elements_by_tag_name('a')
                                 logbut = passiv[-1]
-                                ActionChains(driver).move_to_element(logbut).perform().click()
+                                ActionChains(driver).move_to_element(logbut).perform()
+                                logbut.click()
                                 noci += 1
                                 time.sleep(2)
                                 
@@ -173,9 +173,10 @@ while True and time.localtime()[3] <= 22 or time.localtime()[3] >= 7:
                         username = username.text[0:64] 
                     start_time = time.time()
                     end_time = start_time + sec_intervals
+                    WebDriverWait(driver, 5).until(EC.visibility_of_element_located((By.CLASS_NAME, 'topic-content')))
                     
-                    while True and time.time() <= end_time: #this section find the post needed and summarize it scroll down to the comments section and post the summary, scroll back up and hover over some ads
-                        WebDriverWait(driver, 5).until(EC.visibility_of_element_located((By.CLASS_NAME, 'topic-content')))
+                    print('header found')
+                    while time.time() <= end_time: #this section find the post needed and summarize it scroll down to the comments section and post the summary, scroll back up and hover over some ads
                         try:
                             passiv = driver.find_element_by_class_name('topic-content') #find the post and needed and summarize it
                             try:
@@ -190,35 +191,44 @@ while True and time.localtime()[3] <= 22 or time.localtime()[3] >= 7:
                                     la_herd = ''.join(first_post_box)
                                 except:
                                     la_herd = ' '
-                                    
+                            print('post found and read')        
                             try:
                                 summary_comment = post_summarizer(la_herd)
                             except:
                                 summary_comment = username.text
                             
+                            print('comment box found')
                             username = driver.find_element_by_id('editor') #scroll down to the comments section and post the summary
                             ActionChains(driver).move_to_element(username).perform()
                             passiv = username.find_element_by_tag_name('iframe')
                             driver.switch_to.frame(passiv)
+                            print('switched to iframe')
                             logbut = driver.find_element_by_tag_name('p')
-                            ActionChains(driver).move_to_element(logbut).perform().click()
+                            print('found frame comment box')
+                            ActionChains(driver).move_to_element(logbut).perform()
+                            logbut.click()
+                            print('clicked on the comment box inside iframe')
                             driver.execute_script("arguments[0].innerText = arguments[1] ", logbut, summary_comment)
+                            print('summary inputed')
                             driver.switch_to.default_content()
+                            print('switched back to main page')
                             first_post_box = driver.find_element_by_id('ReplyButton')
-                            ActionChains(driver).move_to_element(first_post_box).perform().click()
+                            ActionChains(driver).move_to_element(first_post_box).perform()
+                            first_post_box.click()
+                            print('summary submitted')
                             if end_time > time.time():
                                 time.sleep(end_time-time.time())
                             else: pass
                         except:
+                            print('error at the section to read post inner')
                             driver.refresh()
+                            time.sleep(2.5)
                             continue
-                        break
                 except:
-                    print('error at reasum section')
+                    print('error at read and summarize section')
                     driver.refresh()
                     time.sleep(2)
                     continue
-                break
                 del start_time, end_time, username, passiv, logbut, la_herd, first_post_box, summary_comment
                 gc.collect()
                 
@@ -237,12 +247,14 @@ while True and time.localtime()[3] <= 22 or time.localtime()[3] >= 7:
                             landage = 0 #set the landage variable to 0
                             logbut = username.find_elements_by_tag_name('a')
                             first_post_box = logbut[-1]
-                            ActionChains(driver).move_to_element(first_post_box).perform().click()#click the next button
+                            ActionChains(driver).move_to_element(first_post_box).perform()
+                            first_post_box.click()#click the next button
                             WebDriverWait(driver, 5).until(EC.visibility_of_element_located((By.CLASS_NAME, 'blog-list-details')))
                             la_herd = driver.find_element_by_class_name('blog-list-details') #find all elements that represent an article
                             first_post = la_herd.find_elements_by_class_name('entry-title')
                             noci = first_post[landage].find_element_by_tag_name('a') #use landage variable to select one page
-                            ActionChains(driver).move_to_element(noci).perform().click() #open the selected page
+                            ActionChains(driver).move_to_element(noci).perform()
+                            noci.click() #open the selected page
                             driver.implicitly_wait(4)
                             driver.refresh()
                 
@@ -274,7 +286,7 @@ while True and time.localtime()[3] <= 22 or time.localtime()[3] >= 7:
                             print('about to sleep')
                             time.sleep(33000)
                     except:
-                        print('error at next post section')
+                        print('error at go to next post section')
                         driver.refresh()
                         time.sleep(2)
                         continue
@@ -285,7 +297,8 @@ while True and time.localtime()[3] <= 22 or time.localtime()[3] >= 7:
         else:
             pass
     except:
+        print('error at connection section')
         serum = True
         continue
     break
-        
+       
